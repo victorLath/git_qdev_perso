@@ -1,3 +1,3 @@
 public interface FabriqueVehicule {
-    void creerVehicule();
+    Vehicule creerVehicule(double vitesse, String type);
 }
