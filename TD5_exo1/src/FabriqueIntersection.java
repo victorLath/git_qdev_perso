@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class FabriqueIntersection {
+public class FabriqueIntersection implements FabriqueVehicule{
     protected double probaVoiture;
     protected double probaBus;
     protected double probaByc;
