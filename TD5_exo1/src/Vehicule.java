@@ -8,6 +8,11 @@ public abstract class Vehicule {
         this.type = t;
     }
 
+    public Vehicule() {
+        this.vitesse = 0;
+        this.type = "";
+    }
+
     public double getVitesse() {
         return vitesse;
     }

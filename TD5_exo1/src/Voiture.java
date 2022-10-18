@@ -3,4 +3,8 @@ public class Voiture extends Vehicule{
         super(v, t);
         this.vitesseMax = 120;
     }
+
+    public Voiture() {
+        super();
+    }
 }

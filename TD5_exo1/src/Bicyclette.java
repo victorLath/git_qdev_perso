@@ -3,4 +3,8 @@ public class Bicyclette extends Vehicule{
         super(v, t);
         this.vitesseMax = 25;
     }
+
+    public Bicyclette() {
+        super();
+    }
 }

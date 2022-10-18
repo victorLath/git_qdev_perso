@@ -3,4 +3,8 @@ public class Pieton extends Vehicule{
         super(v, t);
         this.vitesseMax = 4;
     }
+
+    public Pieton() {
+        super();
+    }
 }

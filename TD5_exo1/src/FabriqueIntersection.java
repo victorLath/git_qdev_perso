@@ -13,10 +13,28 @@ public class FabriqueIntersection {
         this.probaPieton = 0.10;
 }
 
-    FabriqueIntersection(double probaVoiture,double probaBus,double probaByc,double probaPieton){
+    public FabriqueIntersection(double probaPieton, double probaVoiture, double probaBus, double probaBicyclette) throws Exception {
+        if ((probaBicyclette + probaPieton + probaVoiture + probaBus) != 100) throw new Exception("Pas à 100%");
+        if (probaVoiture < 0) throw new Exception("Proba Negatif");
+        if (probaBicyclette < 0) throw new Exception("Proba Negatif");
+        if (probaPieton < 0) throw new Exception("Proba Negatif");
+        if (probaBus < 0) throw new Exception("Proba Negatif");
         this.probaPieton = probaPieton;
-        this.probaBus = probaBus;
         this.probaVoiture = probaVoiture;
+        this.probaBus = probaBus;
         this.probaByc = probaByc;
+    }
+
+    public Vehicule creerVehicule() {
+        /**
+         * 80% pour voiture, 10% pour Pieton et 5% pour bus et bicyclette
+         */
+        int alea = new Random().nextInt(0, 100);
+        if (alea < probaVoiture) return new Voiture();
+        alea -= probaVoiture;
+        if(alea < probaPieton) return new Pieton();
+        alea -= probaPieton;
+        if(alea < probaBus) return new Bus();
+        return new Bicyclette();
     }
 }
