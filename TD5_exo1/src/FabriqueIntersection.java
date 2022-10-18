@@ -22,7 +22,7 @@ public class FabriqueIntersection implements FabriqueVehicule {
         this.probaPieton = probaPieton;
         this.probaVoiture = probaVoiture;
         this.probaBus = probaBus;
-        this.probaByc = probaByc;
+        this.probaByc = probaBicyclette;
     }
 
     public Vehicule creerVehicule() {
