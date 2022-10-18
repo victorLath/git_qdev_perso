@@ -11,7 +11,7 @@ public class FabriqueIntersection {
         this.probaBus = 0.05;
         this.probaByc = 0.05;
         this.probaPieton = 0.10;
-    }
+}
 
     FabriqueIntersection(double probaVoiture,double probaBus,double probaByc,double probaPieton){
         this.probaPieton = probaPieton;
