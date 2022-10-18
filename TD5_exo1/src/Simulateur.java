@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Simulateur {
     private FabriqueVehicule fabriqueVehicule;
@@ -26,5 +27,10 @@ public class Simulateur {
 
     public void ecrireStats(){
         System.out.println(genererStats());
+        Map<String,Integer> stats = genererStats();
+        Set<String> types = stats.keySet();
+        for (String type: types){
+            System.out.println(type+";"+stats.get(type));
+        }
     }
 }

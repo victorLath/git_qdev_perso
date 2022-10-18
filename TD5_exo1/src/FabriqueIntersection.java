@@ -1,17 +1,17 @@
 import java.util.Random;
 
-public class FabriqueIntersection{
+public class FabriqueIntersection implements FabriqueVehicule {
     protected double probaVoiture;
     protected double probaBus;
     protected double probaByc;
     protected double probaPieton;
 
-    FabriqueIntersection(){
+    FabriqueIntersection() {
         this.probaVoiture = 0.8;
         this.probaBus = 0.05;
         this.probaByc = 0.05;
         this.probaPieton = 0.10;
-}
+    }
 
     public FabriqueIntersection(double probaPieton, double probaVoiture, double probaBus, double probaBicyclette) throws Exception {
         if ((probaBicyclette + probaPieton + probaVoiture + probaBus) != 100) throw new Exception("Pas à 100%");
@@ -32,9 +32,9 @@ public class FabriqueIntersection{
         int alea = new Random().nextInt(0, 100);
         if (alea < probaVoiture) return new Voiture();
         alea -= probaVoiture;
-        if(alea < probaPieton) return new Pieton();
+        if (alea < probaPieton) return new Pieton();
         alea -= probaPieton;
-        if(alea < probaBus) return new Bus();
+        if (alea < probaBus) return new Bus();
         return new Bicyclette();
     }
 }
