@@ -1,3 +1,5 @@
+import java.util.concurrent.ThreadLocalRandom;
+
 class Avion extends Thread {
     private String nom;
     private Aeroport a;
@@ -7,7 +9,9 @@ class Avion extends Thread {
     }
 
     public void run() {
-        this.a = new Aeroport();
-        System.out.println("Je suis avion " + this.nom + "sur aeroport" + this.a);
+        this.a = Aeroport.getInstance();
+        System.out.println("Je suis avion " + this.nom + "sur aeroport" + this.a+".decollage !");
+        a.faireDecoller(this.nom);
+
     }
 }
