@@ -1,3 +1,4 @@
+package activeRecord;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -28,7 +29,6 @@ public class Personne {
 
     public Personne findById(int id) throws SQLException {
         Personne p = null;
-        ArrayList<Personne> array = new ArrayList<>();
         Connection connection = DBConnection.getInstance().getConnection();
         DatabaseMetaData dbMetaData = connection.getMetaData();
         String sql = "Select * from Personne where id = ?";
@@ -39,5 +39,17 @@ public class Personne {
         return p;
 
     }
-    public findByName
+    public ArrayList<Personne> findByName(String nom) throws SQLException {
+        ArrayList<Personne> personnes = new ArrayList<>();
+        Connection connection = DBConnection.getInstance().getConnection();
+        DatabaseMetaData dbMetaData = connection.getMetaData();
+        String sql = "Select * from Personne where nom = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1,nom);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            personnes.add(new Personne(rs.getObject(2).toString(), rs.getObject(3).toString()));
+        }
+        return personnes;
+    }
 }
