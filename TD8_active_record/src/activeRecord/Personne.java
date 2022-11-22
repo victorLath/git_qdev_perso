@@ -52,4 +52,24 @@ public class Personne {
         }
         return personnes;
     }
+
+    public static void createTable() throws SQLException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        String sql = "CREATE TABLE `Personne` (\n" +
+                "  `id` int(11) NOT NULL,\n" +
+                "  `nom` varchar(40) NOT NULL,\n" +
+                "  `prenom` varchar(40) NOT NULL\n" +
+                ")";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+    }
+
+    public static void deleteTable() throws SQLException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        String sql = "DROP TABLE Personne";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+    }
+
+
 }
