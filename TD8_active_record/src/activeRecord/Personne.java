@@ -1,4 +1,5 @@
 package activeRecord;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -13,7 +14,7 @@ public class Personne {
         this.prenom = prenom;
     }
 
-    public ArrayList<Personne> findAll() throws SQLException {
+    public static ArrayList<Personne> findAll() throws SQLException {
         ArrayList<Personne> array = new ArrayList<>();
         Connection connection = DBConnection.getInstance().getConnection();
         DatabaseMetaData dbMetaData = connection.getMetaData();
@@ -27,49 +28,90 @@ public class Personne {
         return array;
     }
 
-    public Personne findById(int id) throws SQLException {
+    public static Personne findById(int id) throws SQLException {
         Personne p = null;
         Connection connection = DBConnection.getInstance().getConnection();
-        DatabaseMetaData dbMetaData = connection.getMetaData();
         String sql = "Select * from Personne where id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1,id);
+        ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
-        p = new Personne(rs.getObject(2).toString(), rs.getObject(3).toString());
+        rs.next();
+        p = new Personne(rs.getString("nom"), rs.getString("prenom"));
         return p;
 
     }
-    public ArrayList<Personne> findByName(String nom) throws SQLException {
+
+    public static ArrayList<Personne> findByName(String nom) throws SQLException {
         ArrayList<Personne> personnes = new ArrayList<>();
         Connection connection = DBConnection.getInstance().getConnection();
         DatabaseMetaData dbMetaData = connection.getMetaData();
         String sql = "Select * from Personne where nom = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1,nom);
+        ps.setString(1, nom);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
-            personnes.add(new Personne(rs.getObject(2).toString(), rs.getObject(3).toString()));
+            personnes.add(new Personne(rs.getString("nom"), rs.getString("prenom")));
         }
         return personnes;
     }
 
     public static void createTable() throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
-        String sql = "CREATE TABLE `Personne` (\n" +
-                "  `id` int(11) NOT NULL,\n" +
-                "  `nom` varchar(40) NOT NULL,\n" +
-                "  `prenom` varchar(40) NOT NULL\n" +
-                ")";
+        String sql = "CREATE TABLE Personne ( " + "ID INTEGER  AUTO_INCREMENT, " + "NOM varchar(40) NOT NULL, " + "PRENOM varchar(40) NOT NULL, " + "PRIMARY KEY (ID))";
         PreparedStatement ps = connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
+        ps.executeUpdate();
     }
 
     public static void deleteTable() throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
-        String sql = "DROP TABLE Personne";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
+        String drop = "DROP TABLE Personne";
+        Statement stmt = connection.createStatement();
+        stmt.executeUpdate(drop);
+
+
     }
 
 
+    public void save() throws SQLException {
+        if (id == -1) saveNew();
+        else update();
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public void saveNew() throws SQLException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        String SQLPrep = "INSERT INTO Personne (nom, prenom) VALUES (?,?);";
+        PreparedStatement prep = connection.prepareStatement(SQLPrep, Statement.RETURN_GENERATED_KEYS);
+        prep.setString(1, this.nom);
+        prep.setString(2, this.prenom);
+        prep.executeUpdate();
+    }
+
+    public void update() throws SQLException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        String sql = "Update personne set id=?,nom = ?,prenom = ? where id = ? ";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, this.id);
+        ps.setString(2, this.nom);
+        ps.setString(3, this.prenom);
+        ps.setInt(4, this.id);
+        ps.executeUpdate();
+
+    }
+
+    //TODO auto incrémentation
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 }
