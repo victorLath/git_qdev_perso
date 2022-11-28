@@ -7,7 +7,6 @@ public class Personne {
     private int id;
     private String nom;
     private String prenom;
-
     Personne(String nom, String prenom) {
         this.id = -1;
         this.nom = nom;
@@ -57,7 +56,7 @@ public class Personne {
 
     public static void createTable() throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
-        String sql = "CREATE TABLE Personne ( " + "ID INTEGER  AUTO_INCREMENT, " + "NOM varchar(40) NOT NULL, " + "PRENOM varchar(40) NOT NULL, " + "PRIMARY KEY (ID))";
+        String sql = "CREATE TABLE Personne ( ID INTEGER  AUTO_INCREMENT, NOM varchar(40) NOT NULL, PRENOM varchar(40) NOT NULL, PRIMARY KEY (ID)) ";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.executeUpdate();
     }
@@ -67,22 +66,28 @@ public class Personne {
         String drop = "DROP TABLE Personne";
         Statement stmt = connection.createStatement();
         stmt.executeUpdate(drop);
-
-
     }
 
-
-    public void save() throws SQLException {
-        if (id == -1) saveNew();
-        else update();
+    public int getId() {
+        return id;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    public void delete() throws SQLException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        String sql = "DELETE FROM personne where id = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, this.id);
+        ps.executeUpdate(sql);
+        this.id = -1;
+    }
+
+    public void save() throws SQLException {
+        if (id == -1) saveNew();
+        else update();
     }
 
     public void saveNew() throws SQLException {
@@ -106,12 +111,15 @@ public class Personne {
 
     }
 
-    //TODO auto incrémentation
     public String getNom() {
         return nom;
     }
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
 }
