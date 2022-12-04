@@ -56,7 +56,7 @@ public class Film {
 
     public static void deleteTable() throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
-        String drop = "DROP TABLE film CASCADE CONSTRAINTS";
+        String drop = "DROP TABLE film";
         Statement stmt = connection.createStatement();
         stmt.executeUpdate(drop);
     }
@@ -81,11 +81,10 @@ public class Film {
 
     public void saveNew() throws SQLException, RealisateurAbsentException {
         Connection connection = DBConnection.getInstance().getConnection();
-        String SQLPrep = "INSERT INTO film (id, titre,id_rea) VALUES (?,?,?);";
+        String SQLPrep = "INSERT INTO film (titre,id_rea) VALUES (?,?);";
         PreparedStatement prep = connection.prepareStatement(SQLPrep, Statement.RETURN_GENERATED_KEYS);
-        prep.setInt(1, this.id);
-        prep.setString(2, this.titre);
-        prep.setInt(3, this.id_real);
+        prep.setString(1, this.titre);
+        prep.setInt(2, this.id_real);
         prep.executeUpdate();
     }
 
@@ -107,6 +106,18 @@ public class Film {
 
     public int getId() {
         return id;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setId_real(int id_real) {
+        this.id_real = id_real;
     }
 
     public int getId_real() {

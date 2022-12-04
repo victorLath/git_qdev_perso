@@ -80,10 +80,9 @@ public class Personne {
 
     public void delete() throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
-        String sql = "DELETE FROM personne where id = ?";
-        PreparedStatement ps = connection.prepareStatement(sql);
+        PreparedStatement ps = connection.prepareStatement("DELETE FROM Personne where personne.id = ?");
         ps.setInt(1, this.id);
-        ps.executeUpdate(sql);
+        ps.executeUpdate();
         this.id = -1;
     }
 
@@ -115,6 +114,10 @@ public class Personne {
 
     public String getNom() {
         return nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
     }
 
     public void setNom(String nom) {
