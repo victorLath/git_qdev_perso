@@ -10,13 +10,12 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PersonneTest {
-
+    //test à faire avec une base de donnée vide
     @BeforeEach
     void setUp() throws SQLException {
         Personne.createTable();
         new Personne("Jean","Jacque").save();
         new Personne("Dupont","Paul").save();
-
 
     }
 

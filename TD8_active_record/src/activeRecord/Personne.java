@@ -49,7 +49,9 @@ public class Personne {
         ps.setString(1, nom);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
-            personnes.add(new Personne(rs.getString("nom"), rs.getString("prenom")));
+            Personne p = new Personne(rs.getString("nom"), rs.getString("prenom"));
+            p.setId(rs.getInt("id"));
+            personnes.add(p);
         }
         return personnes;
     }

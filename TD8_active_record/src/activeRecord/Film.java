@@ -29,7 +29,7 @@ public class Film {
         ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
         rs.next();
-        f = new Film(rs.getInt("id"), rs.getString("titre"), rs.getInt("id_real"));
+        f = new Film(rs.getInt("id"), rs.getString("titre"), rs.getInt("id_rea"));
         return f;
 
     }
@@ -37,7 +37,7 @@ public class Film {
     public static ArrayList<Film> findByRealisateur(Personne p) throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
         ArrayList<Film> array = new ArrayList<>();
-        String sql = "Select * from Film where id = ?";
+        String sql = "Select * from Film where id_rea = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, p.getId());
         ResultSet rs = ps.executeQuery();
@@ -64,12 +64,13 @@ public class Film {
     public Personne getRealisateur() throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
         Personne p = null;
-        String sql = "Select * from Personne inner join Film on Personne.id = Film.id where id = ?";
+        String sql = "Select * from Personne inner join Film on Personne.id = Film.id_rea where film.id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, this.id);
         ResultSet rs = ps.executeQuery();
         rs.next();
         p = new Personne(rs.getString("nom"), rs.getString("prenom"));
+        p.setId(rs.getInt("id_rea"));
         return p;
     }
 
@@ -79,9 +80,6 @@ public class Film {
     }
 
     public void saveNew() throws SQLException, RealisateurAbsentException {
-        if (this.id_real == -1) {
-            throw new RealisateurAbsentException("Réalisateur absent");
-        }
         Connection connection = DBConnection.getInstance().getConnection();
         String SQLPrep = "INSERT INTO film (id, titre,id_rea) VALUES (?,?,?);";
         PreparedStatement prep = connection.prepareStatement(SQLPrep, Statement.RETURN_GENERATED_KEYS);
@@ -92,9 +90,6 @@ public class Film {
     }
 
     public void update() throws SQLException, RealisateurAbsentException {
-        if (this.id_real == -1) {
-            throw new RealisateurAbsentException("Réalisateur absent");
-        }
         Connection connection = DBConnection.getInstance().getConnection();
         String sql = "Update film set id=?,titre = ?,id_rea = ? where id = ? ";
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -106,4 +101,15 @@ public class Film {
 
     }
 
+    public String getTitre() {
+        return titre;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getId_real() {
+        return id_real;
+    }
 }
