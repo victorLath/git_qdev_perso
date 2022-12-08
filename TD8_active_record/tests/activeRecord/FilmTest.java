@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FilmTest {
-    //test avec la base de donnée
+    //ATTENTION test à faire avec la base de donnée
     Film film_blade_runner;
     Personne personne_scott;
     Personne p;
