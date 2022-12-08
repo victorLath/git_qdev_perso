@@ -61,25 +61,31 @@ public class Film {
         stmt.executeUpdate(drop);
     }
 
-    public Personne getRealisateur() throws SQLException {
+    public Personne getRealisateur() throws SQLException, RealisateurAbsentException {
         Connection connection = DBConnection.getInstance().getConnection();
         Personne p = null;
         String sql = "Select * from Personne inner join Film on Personne.id = Film.id_rea where film.id = ?";
-        PreparedStatement ps = connection.prepareStatement(sql);
+        PreparedStatement ps = connection.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
         ps.setInt(1, this.id);
         ResultSet rs = ps.executeQuery();
-        rs.next();
-        p = new Personne(rs.getString("nom"), rs.getString("prenom"));
-        p.setId(rs.getInt("id_rea"));
+        rs.last();
+        if (rs.getRow() < 1) {
+            throw new RealisateurAbsentException("Réalisateur absent");
+        } else {
+            rs.beforeFirst();
+            rs.next();
+            p = new Personne(rs.getString("nom"), rs.getString("prenom"));
+            p.setId(rs.getInt("id_rea"));
+        }
         return p;
     }
 
-    public void save() throws SQLException, RealisateurAbsentException {
+    public void save() throws SQLException {
         if (this.id == -1) saveNew();
         else update();
     }
 
-    public void saveNew() throws SQLException, RealisateurAbsentException {
+    public void saveNew() throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
         String SQLPrep = "INSERT INTO film (titre,id_rea) VALUES (?,?);";
         PreparedStatement prep = connection.prepareStatement(SQLPrep, Statement.RETURN_GENERATED_KEYS);
@@ -88,7 +94,7 @@ public class Film {
         prep.executeUpdate();
     }
 
-    public void update() throws SQLException, RealisateurAbsentException {
+    public void update() throws SQLException {
         Connection connection = DBConnection.getInstance().getConnection();
         String sql = "Update film set id=?,titre = ?,id_rea = ? where id = ? ";
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -104,23 +110,23 @@ public class Film {
         return titre;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public void setTitre(String titre) {
         this.titre = titre;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setId_real(int id_real) {
-        this.id_real = id_real;
-    }
-
     public int getId_real() {
         return id_real;
+    }
+
+    public void setId_real(int id_real) {
+        this.id_real = id_real;
     }
 }
