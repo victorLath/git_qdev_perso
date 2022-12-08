@@ -74,8 +74,6 @@ public class CompilationMain {
         p2.getPrenom();
 
 
-
-
         ///////////////// test film
 
         //create table
